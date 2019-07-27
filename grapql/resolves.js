@@ -1,4 +1,6 @@
 const User = require('../models/usuarioModel');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const resolvers = {
     Query: {
@@ -15,7 +17,8 @@ const resolvers = {
             console.log(args);
             // console.log(id);
             try {
-                return await User.find();
+                const usuarios = await User.find();
+                return usuarios;
             } catch (err) {
                 console.log(err);
                 return null;
@@ -33,6 +36,22 @@ const resolvers = {
     },
 
     Mutation: {
+        login: async(_, { input }) => {
+            const user = await User.findOne({nombre: input.nombre});
+            if(user) {                
+                const verificar = await bcrypt.compare(input.password, user.password);
+                if(verificar){
+                    var token = await jwt.sign({ user }, 'secretomio');
+                    return {token};
+                } else {
+                    throw new Error('la contraseña es incorrecta');
+                }
+            }
+            if(!user){
+                console.log('noooo');
+                throw new Error('Usuario No Existe');
+            }
+        },
         // crearUsuario: (_, { input }, ctx) => {
         crearUsuario: async(_, { input }) => {
             console.log(input);
@@ -62,6 +81,24 @@ const resolvers = {
                 console.log(err);
                 return err;
             }
+        },
+        register: async(_, {input}) => {
+            const userDB = await User.findOne({nombre: input.nombre});
+            if(userDB){
+                throw new Error('el usuario esta registrado');
+             }
+            try {
+                const password = await bcrypt.hash(input.password, 10);
+                const user = new User({
+                    nombre: input.nombre,
+                    edad: input.edad,
+                    password: password
+                });
+                const usuarioGuardado = await user.save();
+                return usuarioGuardado;
+            } catch (err) {
+                throw new Error('A ocurrio un error');
+            }   
         }
     }
 };

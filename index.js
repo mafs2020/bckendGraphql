@@ -8,10 +8,13 @@ const graphqlHTTP = require('express-graphql');
 const schema = require('./grapql/schema');
 require('./db/conexion');
 const User = require('./models/usuarioModel');
+const isAuth = require('./middlware/is-Auth');
+
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb', extended: true, parameterLimit: 1000000}));
+app.use(isAuth);
 
 app.post('/', upload.single('img'), (req, res) => {
     console.log('req.file', req.file);
