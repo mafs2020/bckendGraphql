@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 
 const isAuth = async (req, res, next) => {
     console.log('este es el middlware');
-
+    // console.log(req.params);
     next();
 };
 

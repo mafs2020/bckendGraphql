@@ -17,7 +17,7 @@ app.use(express.urlencoded({limit: '50mb', extended: true, parameterLimit: 10000
 app.use(isAuth);
 
 app.post('/', upload.single('img'), (req, res) => {
-    console.log('req.file', req.file);
+    // console.log('req.file', req.file);
     // console.log('req.files.img', req.files.img);
     console.log('llego');
     res.json('llego');

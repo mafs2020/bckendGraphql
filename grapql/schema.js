@@ -29,6 +29,7 @@ const typeDefs = `
         total: Int!
         allUsuario(id: Int): [Usuario!]!
         paginacion(first: Int): [Usuario!]!
+        usuario(id: ID): Usuario
     }
     type Token {
         token: String
@@ -36,10 +37,10 @@ const typeDefs = `
 
     type Mutation{
         login(input: Login): Token
-        register(input: UsuarioInput): LoginDatos
-        crearUsuario(input: UsuarioInput!): Usuario!
-        updateUsuario(id: ID!, input: UsuarioInput!): Usuario
-        eliminarUsuario(id: ID!): Usuario
+        register(input: UsuarioInput): Usuario
+        crearUsuario(input: UsuarioInput): Usuario
+        updateUsuario(id: ID, input: UsuarioInput): Usuario
+        eliminarUsuario(id: ID): Usuario
     }
     
 `;

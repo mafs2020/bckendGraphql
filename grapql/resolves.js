@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const resolvers = {
     Query: {
-        total: async() => {
+        total: async () => {
             try {
                 return await User.countDocuments();
             } catch (err) {
@@ -14,7 +14,6 @@ const resolvers = {
         allUsuario: async(root, args) => {
             // los argumentos son todo lo que pasas es un objeto
         // allUsuario: (root, { id }) => {
-            console.log(args);
             // console.log(id);
             try {
                 const usuarios = await User.find();
@@ -31,6 +30,14 @@ const resolvers = {
                     .skip(first);
             } catch (err) {
                 return null
+            }
+        },
+        usuario: async(_ , { id }) => {
+            console.log(id);
+            try {
+                return await User.findOne({_id: id});
+            } catch (err) {
+                return err;
             }
         }
     },
@@ -63,7 +70,7 @@ const resolvers = {
                 return null;
             }
         },
-        updateUsuario: async(_, { id, input }) => {            
+        updateUsuario: async(_, { id, input }) => {
             try {
                 return await User.findOneAndUpdate({_id:id}, input, {new:true});
                 // return user;
@@ -72,6 +79,7 @@ const resolvers = {
                 return null;
             }
         },
+        
         eliminarUsuario: async(_, { id }) => {
             try {
                 return await User.findOneAndDelete({ _id: id });
